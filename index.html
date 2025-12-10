@@ -1,1 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My eBay Stores</title>
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-card: #0f172a;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.1);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius-lg: 14px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+      --shadow-soft-sm: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --transition-fast: 0.18s ease-out;
+      --max-width: 980px;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0b1120 0, #020617 36%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: var(--max-width);
+    }
+
+    .card-shell {
+      background: linear-gradient(
+        145deg,
+        rgba(56, 189, 248, 0.08),
+        rgba(59, 130, 246, 0.02)
+      );
+      border-radius: 28px;
+      padding: 1px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-main {
+      border-radius: 26px;
+      background: radial-gradient(circle at top left, #020617, #020617 45%, #030712);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 24px 22px 26px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at 30% 0, #38bdf8, #0f172a 55%, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 35px rgba(56, 189, 248, 0.4);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-text h1 {
+      font-size: 1.45rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .badge {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, #0b1120, #020617);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.8);
+    }
+
+    .hero {
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #38bdf8, #22c55e);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .link-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .link-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .store-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.98)
+      );
+      padding: 14px 14px 13px;
+      box-shadow: var(--shadow-soft-sm);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .store-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at top right,
+        rgba(56, 189, 248, 0.18),
+        transparent 55%
+      );
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      pointer-events: none;
+    }
+
+    .store-card:hover {
+      transform: translateY(-3px) translateZ(0);
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.98),
+        rgba(15, 23, 42, 0.99)
+      );
+    }
+
+    .store-card:hover::before {
+      opacity: 1;
+    }
+
+    .store-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .store-name {
+      font-size: 0.96rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .store-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      min-height: 2.2em;
+    }
+
+    .store-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .pill {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .btn-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      font-size: 0.78rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      background: radial-gradient(circle at top left, #38bdf8, #1d4ed8);
+      color: #0b1120;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.5);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        filter var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-link span {
+      font-size: 1rem;
+      transform: translateY(-0.5px);
+    }
+
+    .btn-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 38px rgba(56, 189, 248, 0.7);
+      filter: brightness(1.05);
+    }
+
+    .btn-link:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.45);
+    }
+
+    footer {
+      margin-top: 10px;
+      padding-top: 14px;
+      border-top: 1px solid #111827;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.72rem;
+    }
+
+    .footer-pill {
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.85);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="card-shell">
+      <div class="card-main">
+        <header>
+          <div class="brand-block">
+            <div class="brand-logo">
+              BD
+            </div>
+            <div class="brand-text">
+              <h1>Beast Deals Network</h1>
+              <p>All My eBay Stores</p>
+            </div>
+          </div>
+          <div class="badge">
+            <span class="badge-dot"></span>
+            LIVE STORE HUB
+          </div>
+        </header>
+
+        <section class="hero">
+          <h2 class="hero-title">
+            Tap into all my <span>eBay stores</span> from one link.
+          </h2>
+          <p class="hero-subtitle">
+            Save this page and use it as the master hub for every eBay storefront I run.
+            One link, all the Beast Deals energy.
+          </p>
+        </section>
+
+        <!-- The grid will be filled by JavaScript -->
+        <section class="link-grid" id="store-grid"></section>
+
+        <footer>
+          <div>
+            © <span id="year"></span> Beast Deals Network. All rights reserved.
+          </div>
+          <div class="footer-right">
+            <div class="footer-pill">eBay Hub</div>
+            <div class="footer-pill">Centralized Access</div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ===== CONFIG: EDIT THIS ONLY =====
+    const stores = [
+      {
+        name: "Beast Deals – Main Hub",
+        tag: "Mixed • Deals • Everyday",
+        desc: "Core Beast Deals storefront with a rotating mix of electronics, clothing, and general finds.",
+        url: "https://ebay.us/m/yfdyXL",
+        badge: "Primary Store"
+      },
+      {
+        name: "beasthea-68",
+        tag: "Side Store • Inventory",
+        desc: "Additional listings, tests, and extra inventory routed through this account.",
+        url: "https://www.ebay.com/usr/beasthea-68",
+        badge: "Secondary Store"
+      },
+      {
+        name: "mau-207931",
+        tag: "Legacy • Mixed Items",
+        desc: "Older listings and mixed-category items. Still live, still moving product.",
+        url: "https://www.ebay.com/usr/mau-207931",
+        badge: "Legacy Store"
+      }
+    ];
+    // ===== END CONFIG =====
+
+    // Build the cards dynamically
+    const grid = document.getElementById("store-grid");
+
+    stores.forEach(store => {
+      const card = document.createElement("article");
+      card.className = "store-card";
+
+      card.innerHTML = `
+        <div class="store-header">
+          <div class="store-name">${store.name}</div>
+          <div class="tag">${store.tag}</div>
+        </div>
+        <p class="store-desc">
+          ${store.desc}
+        </p>
+        <div class="store-footer">
+          <div class="pill">${store.badge}</div>
+          <a
+            class="btn-link"
+            href="${store.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit Store <span>↗</span>
+          </a>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    // Auto-update year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
